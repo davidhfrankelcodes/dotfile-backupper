@@ -1,5 +1,3 @@
----
-
 # Dotfile Backupper
 
 ## Overview
@@ -63,5 +61,3 @@ The script has built-in error handling for:
 - Running Git operations
 
 If any of these steps fail, the script will output an error message and terminate.
-
----
