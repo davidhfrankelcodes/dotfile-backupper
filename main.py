@@ -37,44 +37,30 @@ def git_operations(path):
         # Initialize the directory as a Git repository if it isn't already
         if not is_git_repository(path):
             subprocess.run(["git", "-C", path, "init"], check=True)
-
-        # Run git add and capture the output
+        
+        # Run git add
         subprocess.run(["git", "-C", path, "add", "."], check=True)
         
-        # Run git status and capture the output to check if there are changes to commit or push
-        git_status_output = subprocess.run(["git", "-C", path, "status"], stdout=subprocess.PIPE, text=True).stdout
+        # Create a timestamp
+        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")
         
-        # Check if there are changes to commit
-        has_changes_to_commit = "nothing to commit, working tree clean" not in git_status_output
-        
-        # Check if there are changes to push
-        has_changes_to_push = "Your branch is ahead of" in git_status_output
-        
-        # Commit if there are changes
-        if has_changes_to_commit:
-            # Create a timestamp
-            timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")
-            
+        try:
             # Run git commit
             subprocess.run(["git", "-C", path, "commit", "-m", f"Automatic Push {timestamp}"], check=True)
-        else:
+        except subprocess.CalledProcessError as e:
             print("No changes to commit.")
         
-        # Push if there are commits that haven't been pushed yet
-        if has_changes_to_push:
-            # Run git push
-            subprocess.run(["git", "-C", path, "push"], check=True)
-        else:
-            print("No changes to push.")
-            
+        # Run git push
+        subprocess.run(["git", "-C", path, "push"], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error during Git operations: {e}")
         exit(1)
 
 
 if __name__ == "__main__":
-    # Path to the YAML file that contains the list of files to back up
-    yaml_file_path = "config.yaml"
+    # Path to the YAML file relative to this script
+    script_dir = os.path.dirname(__file__)
+    yaml_file_path = os.path.join(script_dir, "config.yaml")
     
     # Read YAML file to get the list of files and destination folder
     config = read_yaml(yaml_file_path)
