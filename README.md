@@ -14,7 +14,7 @@
 
 ## Prerequisites
 
-- Python 3.x
+- Python 3.x and PyYAML (Install with `pip install PyYAML`)
 - Git
 
 ## Installation
