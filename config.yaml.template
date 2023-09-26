@@ -1,0 +1,4 @@
+dotfiles:
+  - /path/to/.bashrc
+  - /path/to/.gitconfig
+destination_folder: /path/to/git/repo/for/dotfiles
